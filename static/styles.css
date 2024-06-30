@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -11,6 +12,7 @@ body {
 
 .container {
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .btn {
@@ -21,6 +23,7 @@ body {
     text-decoration: none;
     border-radius: 25px;
     font-size: 16px;
+    margin-top: 20px;
 }
 
 .btn:hover {
@@ -59,4 +62,80 @@ body {
     margin-top: 20px;
     font-size: 18px;
     color: #1DB954;
+}
+
+.spotify-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #1DB954;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 16px;
+}
+
+.spotify-link:hover {
+    background-color: #1ed760;
+}
+
+.result {
+    margin-top: 20px;
+}
+
+footer {
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    width: 100%;
+    font-size: 14px;
+}
+
+footer a {
+    color: #1DB954;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #191414;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    color: white;
+    border-radius: 10px;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
 }

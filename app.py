@@ -98,7 +98,7 @@ def create_playlist():
 
         response_html = f"""
             <p>Playlist updated! {num_added} songs added, {num_removed} songs removed.</p>
-            <a href='https://open.spotify.com/playlist/{playlist['id']}'>Open Playlist</a>
+            <a href='https://open.spotify.com/playlist/{playlist['id']}' class='spotify-link'>Open Playlist</a>
         """
         return jsonify({'html': response_html})
 

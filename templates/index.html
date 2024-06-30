@@ -10,13 +10,26 @@
 <body>
     <div class="container">
         <h1>Create a Playlist from Your Liked Songs</h1>
-        <button class="btn" id="login-button" onclick="showLoadingAndRedirect()">Login with Spotify and Create Playlist</button>
+        <p>By clicking the button below, you agree to our <a href="#" id="privacy-policy-link">Privacy Policy</a>.</p>
+        <button class="btn" id="login-button" onclick="showLoadingAndRedirect()">Login with Spotify and Create or Update your Liked Songs Playlist</button>
         <div id="loading" class="loading">
             <div class="spinner"></div>
             <p>Loading, please wait...</p>
         </div>
         <div id="result" class="result"></div>
     </div>
+    <footer>
+        <p><a href="#" id="privacy-policy-footer-link">Privacy Policy</a></p>
+        <p>Created for fun by <a href="https://github.com/mschwrdtnr" target="_blank">mschwrdtnr</a> with the help of OpenAI.</p>
+    </footer>
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-policy-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-button">&times;</span>
+            <div id="privacy-policy-container"></div>
+        </div>
+    </div>
+
     <script>
         function showLoadingAndRedirect() {
             document.getElementById('loading').style.display = 'block';
@@ -47,6 +60,39 @@
             const params = new URLSearchParams(window.location.search);
             if (params.has('logged_in') && params.get('logged_in') === 'true') {
                 showLoadingAndFetch();
+            }
+
+            // Modal functionality
+            var modal = document.getElementById("privacy-policy-modal");
+            var openModalButtons = [document.getElementById("privacy-policy-link"), document.getElementById("privacy-policy-footer-link")];
+            var closeModalButton = document.getElementById("close-button");
+
+            openModalButtons.forEach(function(button) {
+                button.onclick = function() {
+                    $.ajax({
+                        url: '/static/privacy-policy.html',
+                        method: 'GET',
+                        dataType: 'html',
+                        success: function(data) {
+                            document.getElementById("privacy-policy-container").innerHTML = data;
+                            modal.style.display = "block";
+                        },
+                        error: function(xhr, status, error) {
+                            document.getElementById("privacy-policy-container").innerHTML = '<p>Error loading privacy policy. Please try again later.</p>';
+                            modal.style.display = "block";
+                        }
+                    });
+                }
+            });
+
+            closeModalButton.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
             }
         });
     </script>
