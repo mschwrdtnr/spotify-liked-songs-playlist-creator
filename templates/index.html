@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Liked Songs Playlist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Create a Playlist from Your Liked Songs</h1>
+        <button class="btn" id="login-button" onclick="showLoadingAndRedirect()">Login with Spotify and Create Playlist</button>
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading, please wait...</p>
+        </div>
+        <div id="result" class="result"></div>
+    </div>
+    <script>
+        function showLoadingAndRedirect() {
+            document.getElementById('loading').style.display = 'block';
+            window.location.href = '/login';
+        }
+
+        function showLoadingAndFetch() {
+            document.getElementById('loading').style.display = 'block';
+            $.ajax({
+                url: '/create_playlist',
+                method: 'POST',
+                success: function(response) {
+                    document.getElementById('loading').style.display = 'none';
+                    if (response.error) {
+                        document.getElementById('result').innerHTML = 'An error occurred: ' + response.error;
+                    } else {
+                        document.getElementById('result').innerHTML = response.html;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('result').innerHTML = 'An error occurred. Please try again.';
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('logged_in') && params.get('logged_in') === 'true') {
+                showLoadingAndFetch();
+            }
+        });
+    </script>
+</body>
+</html>
