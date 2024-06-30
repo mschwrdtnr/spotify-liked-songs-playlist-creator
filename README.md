@@ -8,6 +8,8 @@ Prerequisites:
 - Python and Pip is installed
 - Spotify Developer App is created (Information at https://developer.spotify.com/documentation/web-api/tutorials/getting-started)
 
-1. Create `.env`-File based on `example.env` and update variables 
-2. Install requirements: `pip install -r requirements.txt` 
-3. Access the web app under your defined localhost.
+1. Clone Repository
+2. Create `.env`-File based on `example.env` and update variables 
+3. Install requirements: `pip install -r requirements.txt`
+4. Run `python app.py`
+5. Access the web app under your defined localhost.
