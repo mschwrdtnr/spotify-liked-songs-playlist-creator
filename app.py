@@ -3,12 +3,19 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 import os
+import logging
 
 load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = os.getenv('FLASK_SECRET_KEY')  # Use an environment variable for the secret key
 app.config['SESSION_COOKIE_NAME'] = 'spotify-login-session'
+app.config['SESSION_COOKIE_SECURE'] = True  # Ensure the cookie is only sent over HTTPS
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # Session lifetime
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 sp_oauth = SpotifyOAuth(
     client_id=os.getenv('SPOTIPY_CLIENT_ID'),
@@ -43,7 +50,12 @@ def login():
 @app.route('/callback')
 def callback():
     code = request.args.get('code')
-    token_info = sp_oauth.get_access_token(code)
+    try:
+        token_info = sp_oauth.get_access_token(code)
+    except spotipy.exceptions.SpotifyOauthError as e:
+        logger.error(f"Spotify OAuth error: {e}")
+        return jsonify({'error': 'Authorization failed'}), 400
+
     session['token_info'] = token_info
     return redirect(url_for('home', logged_in='true'))
 
@@ -102,8 +114,12 @@ def create_playlist():
         """
         return jsonify({'html': response_html})
 
+    except spotipy.exceptions.SpotifyException as e:
+        logger.error(f"Spotify API error: {e}")
+        return jsonify({'error': 'Failed to create or update playlist'}), 500
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"Unexpected error: {e}")
+        return jsonify({'error': 'An unexpected error occurred'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
