@@ -21,7 +21,7 @@ sp_oauth = SpotifyOAuth(
     client_id=os.getenv('SPOTIPY_CLIENT_ID'),
     client_secret=os.getenv('SPOTIPY_CLIENT_SECRET'),
     redirect_uri=os.getenv('SPOTIPY_REDIRECT_URI'),
-    scope='user-library-read playlist-modify-public'
+    scope='user-library-read playlist-modify-private'
 )
 
 def get_all_liked_songs(sp):
@@ -79,7 +79,7 @@ def create_playlist():
 
         if playlist is None:
             # Create a new playlist
-            playlist = sp.user_playlist_create(user_id, "Liked Songs Playlist", public=True)
+            playlist = sp.user_playlist_create(user_id, "Liked Songs Playlist", public=False)
             existing_tracks = []
         else:
             # Get existing track IDs
